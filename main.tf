@@ -47,6 +47,12 @@ resource "aws_iam_instance_profile" "instance_profile" {
   role = aws_iam_role.role.name
 }
 
+## IAM Role policy attachment
+resource "aws_iam_role_policy_attachment" "policy-attach" {
+  role       = aws_iam_role.role.name
+  policy_arn = aws_iam_policy.policy.arn
+}
+
 ## Security group
 resource "aws_security_group" "sg" {
   name        = "${var.component}=${var.env}-sg"
