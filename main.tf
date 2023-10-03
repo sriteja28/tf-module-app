@@ -55,8 +55,8 @@
 #
 ### Security group
 #resource "aws_security_group" "sg" {
-#  name        = "${var.component}=${var.env}-sg"
-#  description = "${var.component}=${var.env}-sg"
+#  name        = "${var.component}-${var.env}-sg"
+#  description = "${var.component}-${var.env}-sg"
 #
 #  ingress {
 #    from_port        = 0
@@ -73,7 +73,7 @@
 #  }
 #
 #  tags = {
-#    Name = "${var.component}=${var.env}-sg"
+#    Name = "${var.component}-${var.env}-sg"
 #  }
 #}
 #
@@ -119,8 +119,8 @@
 #}
 
 resource "aws_security_group" "sg" {
-  name        = "${var.component}=${var.env}-sg"
-  description = "${var.component}=${var.env}-sg"
+  name        = "${var.component}-${var.env}-sg"
+  description = "${var.component}-${var.env}-sg"
   vpc_id = var.vpc_id
 
   ingress {
@@ -138,7 +138,7 @@ resource "aws_security_group" "sg" {
   }
 
   tags = {
-    Name = "${var.component}=${var.env}-sg"
+    Name = "${var.component}-${var.env}-sg"
   }
 }
 
