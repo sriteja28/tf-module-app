@@ -12,3 +12,4 @@ variable "kms_key_arn" {}
 variable "desired_capacity" {}
 variable "max_size" {}
 variable "min_size" {}
+variable "allow_ssh_cidr" {}
