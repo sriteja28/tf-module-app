@@ -2,11 +2,12 @@
 resource "aws_security_group" "main" {
   name        = "${var.component}-${var.env}-sg"
   description = "${var.component}-${var.env}-sg"
+  vpc_id = var.vpc_id
 
   ingress {
     from_port   = var.app_port
     to_port     = var.app_port
-    protocol    = "-1"
+    protocol    = "tcp"
     cidr_blocks = var.sg_subnets_cidr
   }
 
