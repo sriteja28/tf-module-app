@@ -2,7 +2,7 @@
 resource "aws_security_group" "main" {
   name        = "${var.component}-${var.env}-sg"
   description = "${var.component}-${var.env}-sg"
-  vpc_id = var.vpc_id
+  vpc_id      = var.vpc_id
 
   ingress {
     from_port   = var.app_port
@@ -50,8 +50,8 @@ resource "aws_launch_template" "main" {
 
     ebs {
       volume_size = 10
-      encrypted = "true"
-      kms_key_id = var.kms_key_arn
+      encrypted   = "true"
+      kms_key_id  = var.kms_key_arn
     }
 
   }
@@ -59,9 +59,10 @@ resource "aws_launch_template" "main" {
 
 
 resource "aws_autoscaling_group" "main" {
-  desired_capacity   = var.desired_capacity
-  max_size           = var.max_size
-  min_size           = var.min_size
+  desired_capacity    = var.desired_capacity
+  max_size            = var.max_size
+  min_size            = var.min_size
+  vpc_zone_identifier = var.subnets
 
   launch_template {
     id      = aws_launch_template.main.id
