@@ -5,7 +5,7 @@ resource "aws_iam_policy" "policy" {
   description = "${var.component}-${var.env}-ssm-pm-policy"
 
   policy = jsonencode({
-    "Version": "2012-10-17"
+    "Version" : "2012-10-17"
     "Statement" : [
       {
         "Sid" : "VisualEditor0",
@@ -17,11 +17,10 @@ resource "aws_iam_policy" "policy" {
           "ssm:GetParameter",
           "kms:Decrypt"
         ],
-        "Resource" : [
+        "Resource" : concat([
           "arn:aws:ssm:us-east-1:178724175855:parameter/roboshop.${var.env}.${var.component}.*",
-          "arn:aws:ssm:us-east-1:178724175855:parameter/roboshop.${var.env}.docdb.*",
           var.kms_arn
-        ]
+        ], var.extra_param_access)
       }
     ]
   })
@@ -32,12 +31,12 @@ resource "aws_iam_role" "role" {
   name = "${var.component}-${var.env}-ec2-role"
 
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Sid    = ""
+        Action    = "sts:AssumeRole"
+        Effect    = "Allow"
+        Sid       = ""
         Principal = {
           Service = "ec2.amazonaws.com"
         }
