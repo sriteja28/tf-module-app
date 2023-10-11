@@ -39,20 +39,20 @@ resource "aws_security_group" "main" {
 
 
 resource "aws_lb_target_group" "main" {
-  name     = "${var.component}-${var.env}-tg"
-  port     = var.app_port
-  protocol = "HTTP"
+  name                 = "${var.component}-${var.env}-tg"
+  port                 = var.app_port
+  protocol             = "HTTP"
   deregistration_delay = 30
-  vpc_id   = var.vpc_id
+  vpc_id               = var.vpc_id
 
   health_check {
-    enabled = true
-    interval = 5
-    path = "/health"
-    port = var.app_port
-    protocol = "HTTP"
-    timeout = 4
-    healthy_threshold = 2
+    enabled             = true
+    interval            = 5
+    path                = "/health"
+    port                = var.app_port
+    protocol            = "HTTP"
+    timeout             = 4
+    healthy_threshold   = 2
     unhealthy_threshold = 2
   }
 }
@@ -69,7 +69,7 @@ resource "aws_lb_listener_rule" "main" {
 
   condition {
     host_header {
-      values = ["${var.component}-${var.env}.sritejadevops.com"]
+      values = ["${local.dns_name}.sritejadevops.com"]
     }
   }
 }
@@ -96,16 +96,16 @@ resource "aws_launch_template" "main" {
     component = var.component
   }))
 
-#  block_device_mappings {
-#    device_name = "/dev/sda1"
-#
-#    ebs {
-#      volume_size = 10
-#      encrypted   = "true"
-#      kms_key_id  = var.kms_key_arn
-#    }
-#
-#  }
+  #  block_device_mappings {
+  #    device_name = "/dev/sda1"
+  #
+  #    ebs {
+  #      volume_size = 10
+  #      encrypted   = "true"
+  #      kms_key_id  = var.kms_key_arn
+  #    }
+  #
+  #  }
 }
 
 
@@ -114,7 +114,7 @@ resource "aws_autoscaling_group" "main" {
   max_size            = var.max_size
   min_size            = var.min_size
   vpc_zone_identifier = var.subnets
-  target_group_arns = [aws_lb_target_group.main.arn]
+  target_group_arns   = [aws_lb_target_group.main.arn]
 
   launch_template {
     id      = aws_launch_template.main.id
@@ -125,7 +125,7 @@ resource "aws_autoscaling_group" "main" {
 ## DNS record R53
 resource "aws_route53_record" "dns" {
   zone_id = "Z070672135BYB8H2ZSHPN"
-  name    = var.component == "frontend" && var.env == "prod" ? "www" : "${var.component}-${var.env}"
+  name    = local.dns_name
   type    = "CNAME"
   ttl     = 30
   records = [var.lb_dns_name]
