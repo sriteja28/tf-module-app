@@ -125,7 +125,7 @@ resource "aws_autoscaling_group" "main" {
 ## DNS record R53
 resource "aws_route53_record" "dns" {
   zone_id = "Z070672135BYB8H2ZSHPN"
-  name    = var.component == "frontend" && var.env.env == "prod" ? "www" : "${var.component}-${var.env}"
+  name    = var.component == "frontend" && var.env == "prod" ? "www" : "${var.component}-${var.env}"
   type    = "CNAME"
   ttl     = 30
   records = [var.lb_dns_name]
